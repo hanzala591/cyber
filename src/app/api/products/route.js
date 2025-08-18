@@ -9,16 +9,14 @@ export async function GET() {
     const products = await Product.find({});
     return NextResponse.json({ success: true, products }, { status: 200 });
   } catch (error) {
-    console.error("Error fetching Products:", error);
     return NextResponse.json(
-      { success: false, message: "Failed to fetch products" },
+      { success: false, message: message.PRODUCTS_FETCH_ERROR },
       { status: 500 }
     );
   }
 }
 
 export async function POST(req) {
-  console.log("Click");
   try {
     await connectDb();
     const formData = await req.formData();
@@ -63,9 +61,8 @@ export async function POST(req) {
 
     return NextResponse.json({ success: true, product }, { status: 201 });
   } catch (error) {
-    console.error("❌ Error creating product:", error);
     return NextResponse.json(
-      { success: false, message: "Failed to create product" },
+      { success: false, message: message.PRODUCT_CREATION_ERROR },
       { status: 500 }
     );
   }

@@ -1,5 +1,5 @@
-"use client";
 import CategoryCard from "@/components/CategoryCard";
+import Footer from "@/components/Footer";
 import ShopingCard from "@/components/ShopingCard";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +12,8 @@ import {
 import { catories } from "@/constants/category";
 
 export default async function Home() {
+  const res = await fetch("http://localhost:3000/api/products");
+  const productsres = await res.json();
   return (
     <div>
       {/* Hero Section */}
@@ -200,6 +202,8 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 }

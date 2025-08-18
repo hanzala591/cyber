@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
-  throw new Error("Please define the MONGODB_URI in .env.local");
+  throw new Error("Please define the MONGODB_URI.");
 }
 
 let cached = global.mongoose;
@@ -23,11 +23,11 @@ async function connectDb() {
         bufferCommands: false,
       })
       .then((mongoose) => {
-        console.log("✅ MongoDB connected");
+        console.log("MongoDB connected");
         return mongoose;
       })
       .catch((err) => {
-        console.error("❌ MongoDB connection error:", err);
+        console.error("MongoDB connection error:", err);
         throw err;
       });
   }
