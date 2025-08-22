@@ -1,6 +1,10 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Footer from "@/components/Footer";
+import { ReduxProvider } from "@/redux/provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,10 +25,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased h-[2000px]`}
+        className={`${geistSans.variable} ${geistMono.variable} font-sf antialiased h-[2000px]`}
       >
-        <Navbar />
-        {children}
+        <ReduxProvider>
+          <Navbar />
+          {children}
+          <Footer />
+        </ReduxProvider>
       </body>
     </html>
   );

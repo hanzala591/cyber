@@ -1,6 +1,6 @@
+import BannerComponent from "@/components/BannerComponent";
 import CategoryCard from "@/components/CategoryCard";
-import Footer from "@/components/Footer";
-import ShopingCard from "@/components/ShopingCard";
+import ProductsComponent from "@/components/ProductsComponent";
 import { Button } from "@/components/ui/button";
 import {
   Carousel,
@@ -12,8 +12,6 @@ import {
 import { catories } from "@/constants/category";
 
 export default async function Home() {
-  const res = await fetch("http://localhost:3000/api/products");
-  const productsres = await res.json();
   return (
     <div>
       {/* Hero Section */}
@@ -175,6 +173,7 @@ export default async function Home() {
           </div>
         </div>
 
+        {/* Products  */}
         <div className="lg:w-[80%] mx-auto flex flex-col p-4 md:px-8 py-8 lg:px-0 lg:py-12">
           <div className="flex gap-4 py-6">
             <div className="cursor-pointer font-bold border-b-4 border-black">
@@ -185,25 +184,52 @@ export default async function Home() {
               Featured Products
             </div>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {productsres.products.map((product, index) => {
-              if (index <= 8) {
-                return (
-                  <ShopingCard
-                    key={index}
-                    name={product.name}
-                    brand={product.brand}
-                    image={product.image}
-                    price={product.price}
-                  />
-                );
-              }
-            })}
+          <ProductsComponent displayedProducts={8} />
+        </div>
+        {/* Banners */}
+        <BannerComponent />
+
+        {/* Discount up to - 50% */}
+        <div className="lg:w-[80%] mx-auto flex flex-col p-4 md:px-8 py-8 lg:px-0 lg:py-12">
+          <h4 className="font-[500] text-2xl mb-8">Discounts up to -50%</h4>
+          <ProductsComponent displayedProducts={4} />
+        </div>
+
+        {/* Banner Section */}
+        <div className="h-[448px] overflow-hidden bg-gradient-to-r from-[#2E2E2E] to-[#000000] relative">
+          <img
+            src="/img/BnnertwoTabfirst.svg"
+            className="h-[192px] w-[237px] ml-5 absolute -left-48 -top-16 lg:left-3 lg:top-0"
+          />
+          <img
+            src="/img/bannerlaptop.svg"
+            className="w-[345px] h-[262px] absolute -top-20 left-1/2 -translate-x-1/2  lg:hidden"
+          />
+          <img
+            src="/img/Bannertwotab.svg"
+            className="w-[345px] h-[262px] absolute lg:bottom-0 lg:left-0 hidden lg:block"
+          />
+          <div className="absolute w-full px-4 text-center flex justify-center items-center flex-col left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ">
+            <h3 className="lg:text-7xl text-5xl font-sans font-thin text-white">
+              Big Summer <span className="font-medium font-sf">Sale</span>{" "}
+            </h3>
+            <p className="text-base  text-[#787878] mt-2">
+              Commodo fames vitae vitae leo mauris in. Eu consequat.
+            </p>
+            <Button variant="transparentwhite" className="py-5 px-8 mt-8">
+              Shop Now
+            </Button>
           </div>
+          <img
+            src="/img/Bannertwoiphone.svg"
+            className="absolute  right-0 -top-20 lg:w-[120px] lg:h-[366px]  w-[80px] h-[245px] -rotate-12  "
+          />
+          <img
+            src="/img/BannertwoWatch.svg"
+            className="absolute lg:bottom-0 lg:right-0  -right-48 -bottom-10"
+          />
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 }

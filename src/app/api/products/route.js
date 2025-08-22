@@ -1,3 +1,4 @@
+import { apierrors } from "@/constants/apierrors";
 import connectDb from "@/db/connectionDb";
 import cloudinary from "@/lib/cloudinary";
 import Product from "@/models/Product";
@@ -10,7 +11,7 @@ export async function GET() {
     return NextResponse.json({ success: true, products }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
-      { success: false, message: message.PRODUCTS_FETCH_ERROR },
+      { success: false, message: apierrors.PRODUCTS_FETCH_ERROR },
       { status: 500 }
     );
   }
@@ -62,7 +63,7 @@ export async function POST(req) {
     return NextResponse.json({ success: true, product }, { status: 201 });
   } catch (error) {
     return NextResponse.json(
-      { success: false, message: message.PRODUCT_CREATION_ERROR },
+      { success: false, message: apierrors.PRODUCT_CREATION_ERROR },
       { status: 500 }
     );
   }
