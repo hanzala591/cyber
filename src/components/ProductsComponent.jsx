@@ -3,21 +3,14 @@ import React, { useEffect, useState } from "react";
 import ShopingCard from "./ShopingCard";
 import ReactLoading from "react-loading";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "lucide-react";
 
-export default function ProductsComponent({ displayedProducts, columns }) {
-  const products = useSelector((state) => state.products.products);
-  const dispatch = useDispatch();
-  console.log(products);
-  useEffect(() => {
-    let products = [];
-    async function fetchData() {
-      const res = await fetch("http://localhost:3000/api/products");
-      const productsres = await res.json();
-      products = productsres.products;
-    }
-    fetchData();
-  }, []);
-
+export default function ProductsComponent({
+  products,
+  displayedProducts,
+  columns,
+}) {
+  
   return (
     <div
       className={`grid grid-cols-2  ${
@@ -26,7 +19,10 @@ export default function ProductsComponent({ displayedProducts, columns }) {
     >
       {products ? (
         products.map((product, index) => {
-          if (index < displayedProducts || index < products.length) {
+          if (
+            index < displayedProducts ||
+            (!displayedProducts && index < products.length)
+          ) {
             return (
               <ShopingCard
                 key={index}

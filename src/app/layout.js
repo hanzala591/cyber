@@ -25,13 +25,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} font-sf antialiased h-[2000px]`}
+        className={`${geistSans.variable} ${geistMono.variable} font-sf antialiased min-h-screen`}
       >
-        <ReduxProvider>
-          <Navbar />
-          {children}
-          <Footer />
-        </ReduxProvider>
+        <ReduxProvider>{children}</ReduxProvider>
       </body>
     </html>
   );

@@ -9,24 +9,46 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { usePathname } from "next/navigation";
-export default function BreadCrum({ pathName }) {
+
+export default function BreadCrum({ product }) {
+  const pathName = usePathname();
+  const segments = pathName.split("/").filter((seg) => seg); // remove empty strings
+  let hrefPath = "";
+  console.log(product);
+
   return (
-    <div className="mb-6">
+    <div className="mb-6 hidden lg:flex">
       <Breadcrumb>
         <BreadcrumbList>
-          {/* {pathName.map((value, index) => {
+          {/* Home link */}
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          </BreadcrumbItem>
+
+          {segments.map((segment, index) => {
+            hrefPath += `/${segment}`;
+            const isLast = index === segments.length - 1;
+
             return (
-              <div
-                key={index}
-                className="flex items-center justify-center gap-3"
-              >
-                <BreadcrumbItem>
-                  <BreadcrumbLink href={`/${value}`}>{value}</BreadcrumbLink>
-                </BreadcrumbItem>
+              <React.Fragment key={index}>
                 <BreadcrumbSeparator />
-              </div>
+                <BreadcrumbItem>
+                  {isLast ? (
+                    <BreadcrumbPage>
+                      {product?._id === segment
+                        ? product.name.charAt(0).toUpperCase() +
+                          product.name.slice(1)
+                        : segment.charAt(0).toUpperCase() + segment.slice(1)}
+                    </BreadcrumbPage>
+                  ) : (
+                    <BreadcrumbLink href={hrefPath}>
+                      {segment.charAt(0).toUpperCase() + segment.slice(1)}
+                    </BreadcrumbLink>
+                  )}
+                </BreadcrumbItem>
+              </React.Fragment>
             );
-          })} */}
+          })}
         </BreadcrumbList>
       </Breadcrumb>
     </div>

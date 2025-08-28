@@ -1,3 +1,4 @@
+"use client";
 import BannerComponent from "@/components/BannerComponent";
 import CategoryCard from "@/components/CategoryCard";
 import ProductsComponent from "@/components/ProductsComponent";
@@ -10,8 +11,15 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { catories } from "@/constants/category";
+import { setProduct } from "@/redux/slices/productsSlice";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-export default async function Home() {
+export default function Home() {
+  const products = useSelector((state) => state.products.products);
+  const [activeCategory, setActiveCategory] = useState("newarrival");
   return (
     <div>
       {/* Hero Section */}
@@ -28,13 +36,15 @@ export default async function Home() {
                 <p className="text-xl mt-2 font-extralight text-[#909090]">
                   Created to change everything for the better. For everyone
                 </p>
-                <Button
-                  variant="transparentwhite"
-                  className="mt-4"
-                  size="transparent"
-                >
-                  Shop Now
-                </Button>
+                <Link href="/products">
+                  <Button
+                    variant="transparentwhite"
+                    className="mt-4"
+                    size="transparent"
+                  >
+                    Shop Now
+                  </Button>
+                </Link>
               </div>
               <div className="relative ">
                 <img
@@ -124,13 +134,15 @@ export default async function Home() {
                   The new 15‑inch MacBook Air makes room for more of what you
                   love with a spacious Liquid Retina display.{" "}
                 </p>
-                <Button
-                  variant="transparentblack"
-                  className="mt-4"
-                  size="transparent"
-                >
-                  Shop Now
-                </Button>
+                <Link href="/products">
+                  <Button
+                    variant="transparentblack"
+                    className="mt-4"
+                    size="transparent"
+                  >
+                    Shop Now
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
@@ -176,15 +188,44 @@ export default async function Home() {
         {/* Products  */}
         <div className="lg:w-[80%] mx-auto flex flex-col p-4 md:px-8 py-8 lg:px-0 lg:py-12">
           <div className="flex gap-4 py-6">
-            <div className="cursor-pointer font-bold border-b-4 border-black">
+            <div
+              className={`cursor-pointer  ${
+                activeCategory === "newarrival"
+                  ? "font-bold border-b-4 border-black"
+                  : "font-semibold"
+              } `}
+              onClick={(e) => {
+                setActiveCategory("newarrival");
+              }}
+            >
               New Arrival
             </div>
-            <div className="cursor-pointer font-semibold">Best Seller</div>
-            <div className="cursor-pointer font-semibold">
+            <div
+              className={`cursor-pointer  ${
+                activeCategory === "bestSeller"
+                  ? "font-bold border-b-4 border-black"
+                  : "font-semibold"
+              } `}
+              onClick={(e) => {
+                setActiveCategory("bestSeller");
+              }}
+            >
+              Best Seller
+            </div>
+            <div
+              className={`cursor-pointer  ${
+                activeCategory === "feturredProducts"
+                  ? "font-bold border-b-4 border-black"
+                  : "font-semibold"
+              } `}
+              onClick={(e) => {
+                setActiveCategory("feturredProducts");
+              }}
+            >
               Featured Products
             </div>
           </div>
-          <ProductsComponent displayedProducts={8} />
+          <ProductsComponent displayedProducts={8} products={products} />
         </div>
         {/* Banners */}
         <BannerComponent />
@@ -192,7 +233,7 @@ export default async function Home() {
         {/* Discount up to - 50% */}
         <div className="lg:w-[80%] mx-auto flex flex-col p-4 md:px-8 py-8 lg:px-0 lg:py-12">
           <h4 className="font-[500] text-2xl mb-8">Discounts up to -50%</h4>
-          <ProductsComponent displayedProducts={4} />
+          <ProductsComponent displayedProducts={4} products={products} />
         </div>
 
         {/* Banner Section */}
@@ -216,9 +257,11 @@ export default async function Home() {
             <p className="text-base  text-[#787878] mt-2">
               Commodo fames vitae vitae leo mauris in. Eu consequat.
             </p>
-            <Button variant="transparentwhite" className="py-5 px-8 mt-8">
-              Shop Now
-            </Button>
+            <Link href="/products">
+              <Button variant="transparentwhite" className="py-5 px-8 mt-8">
+                Shop Now
+              </Button>
+            </Link>
           </div>
           <img
             src="/img/Bannertwoiphone.svg"

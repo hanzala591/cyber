@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "./ui/button";
+import Link from "next/link";
 
 export default function Banner({
   bgColor,
@@ -16,14 +17,16 @@ export default function Banner({
           {title}
         </h1>
         <div className="text-[#909090]">{description}</div>
-        <Button
-          variant={
-            textColor !== "black" ? "transparentwhite" : "transparentblack"
-          }
-          className="px-8 py-5"
-        >
-          Shop Now
-        </Button>
+        <Link href="/products">
+          <Button
+            variant={
+              textColor !== "black" ? "transparentwhite" : "transparentblack"
+            }
+            className="px-8 py-5"
+          >
+            Shop Now
+          </Button>
+        </Link>
       </div>
     </div>
   );

@@ -7,12 +7,12 @@ export default function OrderStep() {
   const path = usePathname();
   const currentStep = path.split("/").length - 1;
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-3">
+    <div className="grid grid-cols-2 lg:grid-cols-3 mb-12">
       {/* First */}
       <div
         className={`flex items-center gap-2 ${
           currentStep === 1 ? " text-black" : " text-gray-400"
-        } ${currentStep === 3 && "hidden lg:flex"}`}
+        } ${currentStep > 1 && "hidden lg:flex"}`}
       >
         <MapPin
           className={`${
@@ -44,7 +44,7 @@ export default function OrderStep() {
 
       {/* Third */}
       <div
-        className={` items-center gap-2 ${
+        className={`flex items-center gap-2 ${
           currentStep === 3 ? " text-black" : " text-gray-400"
         } ${currentStep === 1 && "hidden lg:flex"}`}
       >

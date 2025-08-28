@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   products: [],
@@ -9,7 +9,7 @@ const productsSlice = createSlice({
   initialState,
   reducers: {
     setProducts: (state, action) => {
-      state.products = [...action.payload];
+      state.products = action.payload;
     },
     addProduct: (state, action) => {
       state.products.push(action.payload);

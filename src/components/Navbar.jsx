@@ -1,12 +1,34 @@
 "use client";
 import { Heart, Search, ShoppingCart, User } from "lucide-react";
 import Link from "next/link";
-import React from "react";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
+import React, { useEffect } from "react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { NavInput } from "./ui/NavInput";
+import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { signout } from "@/redux/slices/authSlice";
+import { setProducts } from "@/redux/slices/productsSlice";
 
 function Navbar() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    fetch("http://localhost:3000/api/products")
+      .then((res) => {
+        return res.json();
+      })
+      .then((res) => {
+        dispatch(setProducts(res.products));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  const router = useRouter();
   return (
     <nav className="shadow border-b">
       <div className="lg:w-[80%] mx-auto flex p-4 md:px-8 md:py-4 lg:px-0 lg:py-4">
@@ -31,7 +53,7 @@ function Navbar() {
             <Link href="/contact-us" className="text-gray-600">
               Contact Us
             </Link>
-            <Link href="/blog" className="text-gray-600">
+            <Link href="/blogs" className="text-gray-600">
               Blog
             </Link>
           </div>
@@ -39,7 +61,27 @@ function Navbar() {
           <div className="flex gap-5">
             <Heart />
             <ShoppingCart />
-            <User />
+            <Popover>
+              <PopoverTrigger asChild>
+                <User />
+              </PopoverTrigger>
+              <PopoverContent className="w-56 flex flex-col gap-3">
+                <Button
+                  variant="destructive"
+                  className="cursor-pointer"
+                  onClick={() => {
+                    fetch("/api/auth/signout", {
+                      method: "POST",
+                    });
+                    localStorage.removeItem("user");
+                    dispatch(signout());
+                    router.replace("/signin");
+                  }}
+                >
+                  Logout
+                </Button>
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
         <div>
