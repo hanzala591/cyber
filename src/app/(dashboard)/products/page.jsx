@@ -16,6 +16,8 @@ export default function Category() {
   const [filterItems, setFilterItems] = useState([]);
   const [products, setProducts] = useState([]);
   const [filterProducts, setFilterProducts] = useState([]);
+  const [lowestPrice, setLowestPrice] = useState(0);
+  const [highestPrice, setHighestPrice] = useState(4000);
   const categories = new Set(products?.map((product) => product.category));
   const [drawerSate, setDrawerState] = useState({
     isOpen: false,
@@ -23,14 +25,19 @@ export default function Category() {
   });
   useEffect(() => {
     if (filterItems.length > 0) {
-      const filtered = products?.filter((product) =>
+      let filtered = products?.filter((product) =>
         filterItems.includes(product?.category)
       );
+      filtered = filtered?.filter(
+        (product) =>
+          product?.price > lowestPrice && product?.price < highestPrice
+      );
+      console.log(filtered);
       setFilterProducts(filtered);
     } else {
       setFilterProducts(products);
     }
-  }, [filterItems, products]);
+  }, [filterItems, products, highestPrice, lowestPrice]);
 
   useEffect(() => {
     fetch("/api/products")
@@ -87,22 +94,30 @@ export default function Category() {
                 >
                   <FilterComponent
                     setFilterItems={setFilterItems}
+                    filterItems={filterItems}
                     categories={categories}
+                    setDrawerState={setDrawerState}
+                    lowestPrice={lowestPrice}
+                    setLowestPrice={setLowestPrice}
+                    highestPrice={highestPrice}
+                    setHighestPrice={setHighestPrice}
                   />
                 </Drawer>
               </div>
-              <Select className="flex-1">
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="By rating" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1">1</SelectItem>
-                  <SelectItem value="2">2</SelectItem>
-                  <SelectItem value="3">3</SelectItem>
-                  <SelectItem value="4">4</SelectItem>
-                  <SelectItem value="5">5</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="flex-1 lg:flex-0">
+                <Select className="w-full">
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="By rating" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1">1</SelectItem>
+                    <SelectItem value="2">2</SelectItem>
+                    <SelectItem value="3">3</SelectItem>
+                    <SelectItem value="4">4</SelectItem>
+                    <SelectItem value="5">5</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <p className="lg:hidden text-base block my-2">
               Selected Products:{" "}

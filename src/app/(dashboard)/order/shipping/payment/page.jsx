@@ -81,7 +81,7 @@ export default function PaymentPage() {
     });
     const data = await res.json();
     if (res.ok) {
-      router.replace("/");
+      router.replace("/success");
       dispatch(clearCart());
       dispatch(clearOrder());
     }

@@ -1,21 +1,23 @@
 "use client";
-import { Heart, Search, ShoppingCart, User } from "lucide-react";
+import { Heart, Search, ShoppingCart, SkipBackIcon, User } from "lucide-react";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { NavInput } from "./ui/NavInput";
-import { Button } from "./ui/button";
-import { useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { signout } from "@/redux/slices/authSlice";
 import { setProducts } from "@/redux/slices/productsSlice";
+import { Drawer, Button } from "rizzui";
 
 function Navbar() {
   const dispatch = useDispatch();
+  const [drawerState, setDrawerState] = useState(false);
+  const path = usePathname();
   useEffect(() => {
     fetch("http://localhost:3000/api/products")
       .then((res) => {
@@ -47,16 +49,30 @@ function Navbar() {
         </div>
         <div className="hidden lg:flex gap-5 justify-between items-center w-full">
           <div className="flex gap-5 font-semibold">
-            <Link href="/" className="text-black">
+            <Link
+              href="/"
+              className={path === "/" ? `text-black` : "text-gray-600"}
+            >
               Home
             </Link>
-            <Link href="/about" className="text-gray-600">
+            <Link
+              href="/about"
+              className={path === "/about" ? `text-black` : "text-gray-600"}
+            >
               About
             </Link>
-            <Link href="/contact-us" className="text-gray-600">
+            <Link
+              href="/contact-us"
+              className={
+                path === "/contact-us" ? `text-black` : "text-gray-600"
+              }
+            >
               Contact Us
             </Link>
-            <Link href="/blogs" className="text-gray-600">
+            <Link
+              href="/blogs"
+              className={path === "/blogs" ? `text-black` : "text-gray-600"}
+            >
               Blog
             </Link>
           </div>
@@ -72,7 +88,6 @@ function Navbar() {
               </PopoverTrigger>
               <PopoverContent className="w-56 flex flex-col gap-3">
                 <Button
-                  variant="destructive"
                   className="cursor-pointer"
                   onClick={() => {
                     fetch("/api/auth/signout", {
@@ -96,7 +111,46 @@ function Navbar() {
             width={50}
             height={50}
             alt=""
+            onClick={() => setDrawerState(true)}
           />
+          <Drawer isOpen={drawerState} onClose={() => setDrawerState(false)}>
+            <div className="flex flex-col items-center pt-16 gap-5 font-semibold">
+              <SkipBackIcon
+                className="absolute right-5 top-5"
+                onClick={() => setDrawerState(false)}
+              />
+              <Link
+                href="/"
+                className={path === "/" ? `text-black` : "text-gray-600"}
+                onClick={() => setDrawerState(false)}
+              >
+                Home
+              </Link>
+              <Link
+                href="/about"
+                className={path === "/about" ? `text-black` : "text-gray-600"}
+                onClick={() => setDrawerState(false)}
+              >
+                About
+              </Link>
+              <Link
+                href="/contact-us"
+                className={
+                  path === "/contact-us" ? `text-black` : "text-gray-600"
+                }
+                onClick={() => setDrawerState(false)}
+              >
+                Contact Us
+              </Link>
+              <Link
+                href="/blogs"
+                className={path === "/blogs" ? `text-black` : "text-gray-600"}
+                onClick={() => setDrawerState(false)}
+              >
+                Blog
+              </Link>
+            </div>
+          </Drawer>
         </div>
       </div>
     </nav>

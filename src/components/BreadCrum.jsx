@@ -14,7 +14,6 @@ export default function BreadCrum({ product }) {
   const pathName = usePathname();
   const segments = pathName.split("/").filter((seg) => seg); // remove empty strings
   let hrefPath = "";
-  console.log(product);
 
   return (
     <div className="mb-6 hidden lg:flex">
