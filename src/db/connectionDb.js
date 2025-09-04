@@ -23,11 +23,9 @@ async function connectDb() {
         bufferCommands: false,
       })
       .then((mongoose) => {
-        console.log("MongoDB connected");
         return mongoose;
       })
       .catch((err) => {
-        console.error("MongoDB connection error:", err);
         throw err;
       });
   }

@@ -19,7 +19,7 @@ function Navbar() {
   const [drawerState, setDrawerState] = useState(false);
   const path = usePathname();
   useEffect(() => {
-    fetch("http://localhost:3000/api/products")
+    fetch("/api/products")
       .then((res) => {
         return res.json();
       })

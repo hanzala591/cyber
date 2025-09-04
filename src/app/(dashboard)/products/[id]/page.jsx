@@ -11,11 +11,11 @@ import { ChevronDown } from "lucide-react";
 import React from "react";
 
 export default async function page({ params }) {
-  const response = await fetch("http://localhost:3000/api/products");
+  const response = await fetch("/api/products");
   const productsData = await response.json();
   const products = productsData.products;
   const { id } = await params;
-  const res = await fetch(`http://localhost:3000/api/products/${id}`, {
+  const res = await fetch(`/api/products/${id}`, {
     cache: "no-store",
   });
   const data = await res.json();

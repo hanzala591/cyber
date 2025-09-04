@@ -32,7 +32,6 @@ export default function Category() {
         (product) =>
           product?.price > lowestPrice && product?.price < highestPrice
       );
-      console.log(filtered);
       setFilterProducts(filtered);
     } else {
       setFilterProducts(products);

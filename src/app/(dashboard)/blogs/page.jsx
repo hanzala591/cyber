@@ -14,7 +14,6 @@ import CreateBlog from "@/components/CreateBlog";
 
 export default function BlogPage() {
   const [blogs, setBlogs] = useState([]);
-  console.log(blogs);
   useEffect(() => {
     const fetchBlogs = async () => {
       const res = await fetch("/api/blog/allblogs");
@@ -46,7 +45,6 @@ export default function BlogPage() {
 
       {/* Blog Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  gap-6">
-        {console.log(blogs)}
         {blogs.map((blog) => (
           <Card key={blog._id} className="shadow-md hover:shadow-lg transition">
             <img

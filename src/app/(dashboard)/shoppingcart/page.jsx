@@ -47,7 +47,6 @@ export default function ShoppingCart() {
     },
   });
   async function onSubmit(values) {
-    console.log(values);
   }
   return (
     <div className="lg:w-[80%]  mx-auto flex flex-col p-4 md:px-8 py-8 lg:px-0 lg:py-12">
