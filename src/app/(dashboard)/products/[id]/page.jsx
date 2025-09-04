@@ -91,7 +91,7 @@ export default async function page({ params }) {
                   />
                 ))}
               </div>
-              <p>
+              <p className="font-normal text-sm">
                 Enhanced capabilities thanks toan enlarged display of 6.7
                 inchesand work without rechargingthroughout the day. Incredible
                 photosas in weak, yesand in bright lightusing the new systemwith
@@ -141,7 +141,7 @@ export default async function page({ params }) {
         <div className="lg:w-[80%] mx-auto flex flex-col p-4 lg:px-0 py-6">
           <div className="lg:px-10 px-6 px py-12 flex gap-8 flex-col bg-white">
             <h3 className="text-2xl font-medium">Details</h3>
-            <p className="text-sm font-light">
+            <p className="text-sm font-medium">
               Just as a book is judged by its cover, the first thing you notice
               when you pick up a modern smartphone is the display. Nothing
               surprising, because advanced technologies allow you to practically
@@ -154,21 +154,21 @@ export default async function page({ params }) {
               real admiration for many.
             </p>
             <div className="flex flex-col gap-7">
-              <h3 className="font-medium text-2xl">Screen</h3>
+              <h3 className="font-medium text-xl ">Screen</h3>
               <div className="flex flex-col gap-8">
-                <div className="flex justify-between text-2xl font-normal border-b pb-2">
+                <div className="flex justify-between text-base font-normal border-b pb-2">
                   <p>Screen diagonal</p>
                   <p>6.7"</p>
                 </div>
-                <div className="flex justify-between text-2xl font-normal border-b pb-2">
+                <div className="flex justify-between text-base font-normal border-b pb-2">
                   <p>The screen resolution</p>
                   <p>2796x1290</p>
                 </div>
-                <div className="flex justify-between text-2xl font-normal border-b pb-2">
+                <div className="flex justify-between text-base font-normal border-b pb-2">
                   <p>The screen resolution</p>
                   <p>2796x1290</p>
                 </div>
-                <div className="flex justify-between text-2xl font-normal border-b pb-2">
+                <div className="flex justify-between text-base font-normal border-b pb-2">
                   <p>Additionally</p>
                   <p className="lg:w-44 w-28">
                     Dynamic IslandAlways-On displayHDR displayTrue ToneWide

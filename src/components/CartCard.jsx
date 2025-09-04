@@ -13,7 +13,7 @@ export default function CartCard({ product }) {
     dispatch(removeToCart(product._id));
   };
   return (
-    <div className="flex items-center py-5 border-b border-b-gray-200 lg:gap-3 gap-1">
+    <div className="flex  items-center py-5 border-b border-b-gray-200 lg:gap-3 gap-1">
       <img
         src={product ? product?.image : "/img/samsungsvg.svg"}
         className="lg:size-28 size-24"
