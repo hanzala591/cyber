@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-
+import User from "./User";
 const BlogSchema = new Schema(
   {
     title: { type: String, required: true },
@@ -7,7 +7,7 @@ const BlogSchema = new Schema(
     image: { type: String, default: "" },
     author: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "",
+      ref: "User",
     },
   },
   { timestamps: true }

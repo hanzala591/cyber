@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
+import { Drawer, Button, Text } from "rizzui";
 import FilterComponent from "@/components/FilterComponent";
 import ProductsComponent from "@/components/ProductsComponent";
 
@@ -16,13 +16,15 @@ export default function Category() {
   const [filterItems, setFilterItems] = useState([]);
   const [products, setProducts] = useState([]);
   const [filterProducts, setFilterProducts] = useState([]);
-
-  const categories = new Set(products.map((product) => product.category));
-
+  const categories = new Set(products?.map((product) => product.category));
+  const [drawerSate, setDrawerState] = useState({
+    isOpen: false,
+    size: "full",
+  });
   useEffect(() => {
     if (filterItems.length > 0) {
-      const filtered = products.filter((product) =>
-        filterItems.includes(product.category)
+      const filtered = products?.filter((product) =>
+        filterItems.includes(product?.category)
       );
       setFilterProducts(filtered);
     } else {
@@ -45,19 +47,51 @@ export default function Category() {
       <div className="lg:w-[80%] mx-auto flex flex-col p-4 md:px-8 lg:px-0 py-6">
         <BreadCrum />
         <div className="grid lg:grid-cols-[25%_1fr] gap-6 w-full">
-          <FilterComponent
-            setFilterItems={setFilterItems}
-            categories={categories}
-          />
+          <div className="hidden lg:flex">
+            <FilterComponent
+              setFilterItems={setFilterItems}
+              categories={categories}
+            />
+          </div>
           <div>
-            <div className="flex justify-between items-center mb-4">
-              <p className="text-base flex items-center justify-center">
+            <div className="flex gap-4 justify-between items-center mb-4">
+              <p className="hidden text-base lg:flex items-center justify-center">
                 Selected Products:{" "}
                 <span className="font-semibold text-xl">
-                  {filterProducts.length}
+                  {filterProducts?.length}
                 </span>
               </p>
-              <Select>
+              <div className="flex-1 lg:hidden">
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    setDrawerState((prevState) => ({
+                      ...prevState,
+                      isOpen: true,
+                      size: "full",
+                    }))
+                  }
+                  className="w-full text-left h-9 items-start justify-start"
+                >
+                  Filters
+                </Button>
+                <Drawer
+                  isOpen={drawerSate.isOpen}
+                  size={drawerSate.size}
+                  onClose={() =>
+                    setDrawerState((prevState) => ({
+                      ...prevState,
+                      isOpen: false,
+                    }))
+                  }
+                >
+                  <FilterComponent
+                    setFilterItems={setFilterItems}
+                    categories={categories}
+                  />
+                </Drawer>
+              </div>
+              <Select className="flex-1">
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="By rating" />
                 </SelectTrigger>
@@ -70,7 +104,12 @@ export default function Category() {
                 </SelectContent>
               </Select>
             </div>
-
+            <p className="lg:hidden text-base block my-2">
+              Selected Products:{" "}
+              <span className="font-semibold text-xl">
+                {filterProducts?.length}
+              </span>
+            </p>
             <ProductsComponent columns={3} products={filterProducts} />
           </div>
         </div>

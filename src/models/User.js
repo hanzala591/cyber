@@ -10,6 +10,13 @@ const userSchema = new mongoose.Schema(
       required: true,
       minlength: [4, "Password minimum 4 Digits"],
     },
+    address: [
+      {
+        city: String,
+        street: String,
+        number: String,
+      },
+    ],
     role: { type: String, enum: ["user", "admin"], default: "user" },
   },
   { timestamps: true }

@@ -15,27 +15,38 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import CartCard from "@/components/CartCard";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import Link from "next/link";
 
 const formSchema = z.object({
   username: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
 });
-export default function page() {
-  // 1. Define your form.
-  // 1. Define your form.
+export default function ShoppingCart() {
+  const cart = useSelector((state) => state.cart.cart);
+  const allProducts = useSelector((state) => state.products.products);
+  const cartProductsDetails = cart.map((cartProduct) => {
+    const productDetails = allProducts.find(
+      (currentProduct) => cartProduct?.productId === currentProduct?._id
+    );
+    return {
+      ...productDetails,
+      quantity: cartProduct?.quantity,
+    };
+  });
+  const totalPrice = cartProductsDetails.reduce((acc, item) => {
+    return acc + item.price * item.quantity;
+  }, 0);
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
     },
   });
-
-  // 2. Define a submit handler.
-  function onSubmit(values) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+  async function onSubmit(values) {
     console.log(values);
   }
   return (
@@ -43,8 +54,9 @@ export default function page() {
       <div className="grid lg:grid-cols-2 grid-cols-1 gap-10">
         <div className="">
           <h1 className="text-2xl text-bold">Shopping Cart</h1>
-          <CartCard />
-          <CartCard />
+          {cartProductsDetails.map((product, index) => {
+            return <CartCard product={product} key={index} />;
+          })}
         </div>
         <div className="border border-gray-200 rounded-xl  p-8">
           <h1 className="text-base font-bold mb-6">Order Summary</h1>
@@ -87,24 +99,30 @@ export default function page() {
               <div className="flex flex-col gap-4">
                 <div className="text-base flex justify-between font-semibold">
                   <div>Subtotal</div>
-                  <div> $2347</div>
+                  <div> ${(totalPrice - totalPrice * 0.15).toFixed(2)}</div>
                 </div>
                 <div className="text-base flex justify-between ">
                   <div>Estimated Tax</div>
-                  <div className="font-semibold">$50</div>
+                  <div className="font-semibold">
+                    ${(totalPrice * 0.05).toFixed(2)}
+                  </div>
                 </div>{" "}
                 <div className="text-base flex justify-between font-medium">
                   <div>Estimated shipping & Handling</div>
-                  <div className="font-semibold">$29</div>
+                  <div className="font-semibold">
+                    ${(totalPrice * 0.1).toFixed(2)}
+                  </div>
                 </div>
                 <div className="text-base flex justify-between font-semibold">
                   <div>Total</div>
-                  <div>$2426</div>
+                  <div>${totalPrice}</div>
                 </div>
               </div>
-              <Button type="submit" className="w-full">
-                Submit
-              </Button>
+              <Link href="order">
+                <Button type="submit" className="w-full py-7 cursor-pointer">
+                  Checkout
+                </Button>
+              </Link>
             </form>
           </Form>
         </div>

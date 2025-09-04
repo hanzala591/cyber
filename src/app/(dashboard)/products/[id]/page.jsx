@@ -1,7 +1,11 @@
 import BreadCrum from "@/components/BreadCrum";
+import CartControls from "@/components/CartControls";
+import ProductGallery from "@/components/ProductGallery";
 import ProductsComponent from "@/components/ProductsComponent";
+import ProductSpecificationCard from "@/components/ProductSpecificationCard";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { SPECIFICATIONS } from "@/constants/category";
 import Product from "@/models/Product";
 import { ChevronDown } from "lucide-react";
 import React from "react";
@@ -19,30 +23,22 @@ export default async function page({ params }) {
   return (
     <div className="w-full">
       <div className="lg:w-[80%] mx-auto flex flex-col p-4 lg:px-0 py-6">
-        <BreadCrum product={product}/>
+        <BreadCrum product={product} />
         <div className="lg:py-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div className="grid grid-cols-1 lg:grid-cols-[15%_80%] gap-8 lg:items-center justify-center">
               <div className="flex order-2 lg:order-1 flex-row items-center justify-center lg:flex-col gap-4">
-                <img
-                  src={product ? product?.image : "/img/product5.svg"}
-                  className="lg:size-20 size-16"
-                  alt=""
+                <ProductGallery
+                  productUrl={product ? product?.image : "/img/product1.svg"}
                 />
-                <img
-                  src={product ? product?.image : "/img/product1.svg"}
-                  className="lg:size-20 size-16"
-                  alt=""
+                <ProductGallery
+                  productUrl={product ? product?.image : "/img/product1.svg"}
                 />
-                <img
-                  src={product ? product?.image : "/img/product2.svg"}
-                  className="lg:size-20 size-16"
-                  alt=""
+                <ProductGallery
+                  productUrl={product ? product?.image : "/img/product1.svg"}
                 />
-                <img
-                  src={product ? product?.image : "/img/product3.svg"}
-                  className="lg:size-20 size-16"
-                  alt=""
+                <ProductGallery
+                  productUrl={product ? product?.image : "/img/product1.svg"}
                 />
               </div>
               <img
@@ -60,7 +56,7 @@ export default async function page({ params }) {
                   {product ? `${product?.price}` : "$1399"}
                 </p>
                 <p className="font-normal text-2xl text-[#A0A0A0] line-through">
-                  {product ? `${product?.price+product.discount}` : "$1499"}
+                  {product ? `${product?.price + product.discount}` : "$1499"}
                 </p>
               </div>
               <div className="flex gap-4 items-center">
@@ -86,76 +82,14 @@ export default async function page({ params }) {
                 </div>
               </div>
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-                <div className="rounded bg-[#F4F4F4] text-center py-4">
-                  <div className="flex gap-3 ml-4">
-                    <img src="/icons/icon1.svg" alt="" />
-                    <div className="flex flex-col">
-                      <p className="text-sm text-left text-[#A7A7A7]">
-                        Screen size
-                      </p>
-                      <p className="text-sm text-left text-[#4E4E4E]">6.7"</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="rounded bg-[#F4F4F4] text-center py-4">
-                  <div className="flex gap-3 ml-4">
-                    <img src="/icons/icon2.svg" alt="" />
-                    <div className="flex flex-col">
-                      <p className="text-sm text-left text-[#A7A7A7]">CPU</p>
-                      <p className="text-sm text-left text-[#4E4E4E]">
-                        Apple A16 Bionic
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="rounded bg-[#F4F4F4] text-center py-4">
-                  <div className="flex gap-3 ml-4">
-                    <img src="/icons/icon3.svg" alt="" />
-                    <div className="flex flex-col">
-                      <p className="text-sm text-left text-[#A7A7A7]">
-                        Number of Cores
-                      </p>
-                      <p className="text-sm text-left text-[#4E4E4E]">6</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="rounded bg-[#F4F4F4] text-center py-4">
-                  <div className="flex gap-3 ml-4">
-                    <img src="/icons/icon4.svg" alt="" />
-                    <div className="flex flex-col">
-                      <p className="text-sm text-left text-[#A7A7A7]">
-                        Main camera
-                      </p>
-                      <p className="text-sm text-left text-[#4E4E4E]">
-                        48-12 -12 MP
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="rounded bg-[#F4F4F4] text-center py-4">
-                  <div className="flex gap-3 ml-4">
-                    <img src="/icons/icon5.svg" alt="" />
-                    <div className="flex flex-col">
-                      <p className="text-sm text-left text-[#A7A7A7]">
-                        Front-camera
-                      </p>
-                      <p className="text-sm text-left text-[#4E4E4E]">12 MP</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="rounded bg-[#F4F4F4] text-center py-4">
-                  <div className="flex gap-3 ml-4">
-                    <img src="/icons/icon6.svg" alt="" />
-                    <div className="flex flex-col">
-                      <p className="text-sm text-left text-[#A7A7A7]">
-                        Battery capacity
-                      </p>
-                      <p className="text-sm text-left text-[#4E4E4E]">
-                        4323 mAh
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                {SPECIFICATIONS.map((specification, index) => (
+                  <ProductSpecificationCard
+                    key={index}
+                    url={specification.url}
+                    label={specification.label}
+                    value={specification.value}
+                  />
+                ))}
               </div>
               <p>
                 Enhanced capabilities thanks toan enlarged display of 6.7
@@ -163,15 +97,7 @@ export default async function page({ params }) {
                 photosas in weak, yesand in bright lightusing the new systemwith
                 two cameras more...
               </p>
-              <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
-                <Button
-                  variant="transparentwhite"
-                  className="w-full py-7 text-black"
-                >
-                  Add to Wishlist
-                </Button>
-                <Button className="w-full py-7">Add to Card</Button>
-              </div>
+              <CartControls />
               <div className="grid grid-cols-3 gap-4">
                 <div className="flex lg:flex-row flex-col gap-4  items-center justify-center">
                   <img

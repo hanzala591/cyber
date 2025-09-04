@@ -2,31 +2,57 @@
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+import { clearOrder } from "@/redux/slices/orderSlice";
+import { clearCart } from "@/redux/slices/cartSlice";
 
 const formSchema = z.object({
   cardholdername: z.string().min(3, {
     message: "Enter Valid card holder name",
   }),
-  cardnumber: z.int().min(16, {
+  cardnumber: z.string().min(16, {
     error: "Enter Valid Card number.",
+  }),
+  expiraydate: z.string().min(3, {
+    error: "Enter Valid Card number.",
+  }),
+  cvv: z.string().min(3, {
+    error: "Enter Valid CVV number.",
   }),
 });
 
-export default function page() {
+export default function PaymentPage() {
+  const cart = useSelector((state) => state.cart.cart);
+  const order = useSelector((state) => state.order.order);
+  const allProducts = useSelector((state) => state.products.products);
+  const userId = useSelector((state) => state.auth?.user?._id);
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const cartProducts = cart.map((cartProduct, index) => {
+    const productDetails = allProducts.find(
+      (product) => product?._id === cartProduct?.productId
+    );
+    return {
+      ...productDetails,
+      quantity: cartProduct?.quantity,
+    };
+  });
+  const totalPrice = cartProducts.reduce((acc, item) => {
+    return acc + item.price * item.quantity;
+  }, 0);
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,64 +60,93 @@ export default function page() {
     },
   });
 
-  function onSubmit(values) {
-    console.log(values);
+  async function onSubmit(values) {
+    const res = await fetch("/api/payment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: userId,
+        products: cart,
+        address: {
+          street: order?.selectedAddress?.street,
+          city: order?.selectedAddress?.city,
+          number: order.selectedAddress?.number,
+        },
+        shipmentMethod: order?.selectedShipmentMethod,
+        payment: values,
+        totalprice: totalPrice,
+      }),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      router.replace("/");
+      dispatch(clearCart());
+      dispatch(clearOrder());
+    }
   }
+
   return (
     <div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-36">
         <div className="border rounded-xl px-6 py-8 hidden lg:flex flex-col">
           <p className="font-semibold text-xl mb-6">Summary</p>
           <div className="flex flex-col gap-4">
-            <div className="flex gap-4  items-center p-4 bg-[#F6F6F6] rounded-2xl">
-              <img src="/img/IphoneTab.svg" alt="" className="w-10 h-10" />
-              <div className="flex w-full justify-between items-center">
-                {" "}
-                <p className="text-base font-medium">
-                  Apple iPhone 14 Pro Max 128Gb{" "}
-                </p>
-                <p className="font-bold text-base">$1399</p>
-              </div>
-            </div>
-            <div className="flex gap-4  items-center p-4 bg-[#F6F6F6] rounded-2xl">
-              <img src="/img/IphoneTab.svg" alt="" className="w-10 h-10" />
-              <div className="flex w-full justify-between items-center">
-                {" "}
-                <p className="text-base font-medium">
-                  Apple iPhone 14 Pro Max 128Gb{" "}
-                </p>
-                <p className="font-bold text-base">$1399</p>
-              </div>
-            </div>
+            {cartProducts?.map((product, index) => {
+              return (
+                <div
+                  key={index}
+                  className="flex gap-4  items-center p-4 bg-[#F6F6F6] rounded-2xl"
+                >
+                  <img src={product?.image} alt="" className="w-10 h-10" />
+                  <div className="flex w-full justify-between items-center">
+                    {" "}
+                    <p className="text-base font-medium">{product?.name}</p>
+                    <p className="font-bold text-base">
+                      ${product?.price * product?.quantity}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
-          <div className="flex flex-col gap-4 mt-4">
+          <div className="flex flex-col gap-1 mt-4">
             <p className="text-sm font-medium">Address</p>
             <p className="text-base font-normal">
-              1131 Dusty Townline, Jacksonville, TX 40322
+              {order?.selectedAddress?.city} {order?.selectedAddress?.street}
             </p>
           </div>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1 my-4">
             <p className="text-sm font-medium">Shipment method</p>
-            <p className="text-base font-normal">Free</p>
+            <p className="text-base font-normal uppercase">
+              {order?.selectedShipmentMethod}
+            </p>
           </div>
           <div className="flex flex-col gap-4">
             <div className="flex justify-between">
               <p className="text-base font-medium">Subtotal</p>
-              <p className="text-base font-medium">$2347</p>
+              <p className="text-base font-medium">
+                ${(totalPrice - totalPrice * 0.15).toFixed(2)}
+              </p>
             </div>
             <div className="flex justify-between">
               <p className="text-base font-normal">Estimated Tax</p>
-              <p className="text-base font-medium">$50</p>
+              <p className="text-base font-medium">
+                ${(totalPrice * 0.05).toFixed(2)}
+              </p>
             </div>{" "}
             <div className="flex justify-between">
               <p className="text-base font-normal">
                 Estimated shipping & Handling
               </p>
-              <p className="text-base font-medium">$29</p>
+              <p className="text-base font-medium">
+                ${(totalPrice * 0.1).toFixed(2)}
+              </p>
             </div>
             <div className="flex justify-between">
               <p className="text-base font-medium">Total</p>
-              <p className="text-base font-medium">$2426</p>
+              <p className="text-base font-medium">${totalPrice}</p>
             </div>
           </div>
         </div>
@@ -131,7 +186,6 @@ export default function page() {
               </div>
             </div>
           </div>
-
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
@@ -160,7 +214,6 @@ export default function page() {
                         placeholder="Card Number"
                         {...field}
                         className="py-6 px-6"
-                        type="number"
                       />
                     </FormControl>
                     <FormMessage />
@@ -174,7 +227,11 @@ export default function page() {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <Input placeholder="Exp. Date" className="py-6 px-6" />
+                        <Input
+                          placeholder="Exp. Date"
+                          className="py-6 px-6"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -190,7 +247,6 @@ export default function page() {
                           placeholder="CVV"
                           {...field}
                           className="py-6 px-6"
-                          type="number"
                         />
                       </FormControl>
                       <FormMessage />
@@ -207,14 +263,12 @@ export default function page() {
                     Back
                   </Button>
                 </Link>
-                <Link href="/order/shipping/payment">
-                  <Button
-                    type="submit"
-                    className="px-12 py-6 font-semibold rounded"
-                  >
-                    Pay
-                  </Button>
-                </Link>{" "}
+                <Button
+                  type="submit"
+                  className="px-12 py-6 font-semibold rounded"
+                >
+                  Pay
+                </Button>
               </div>
             </form>
           </Form>

@@ -1,15 +1,32 @@
-import React from "react";
+"use client";
+import React, { useEffect } from "react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setSelectedAddress,
+  setSelectedShipmentMethod,
+} from "@/redux/slices/orderSlice";
 export default function () {
+  useEffect(() => {
+    dispatch(setSelectedShipmentMethod("freeshipment"));
+  }, []);
+
+  const selectedShipmentMethod = useSelector(
+    (state) => state.order.order.selectedShipmentMethod
+  );
+  const dispatch = useDispatch();
+  const onChangeShipment = (e) => {
+    dispatch(setSelectedShipmentMethod(e));
+  };
   return (
     <div>
       <div>
         <h6 className="text-xl font-semibold mb-5">Shipment Method</h6>
       </div>
-      <RadioGroup defaultValue="freeshipment">
+      <RadioGroup defaultValue="freeshipment" onValueChange={onChangeShipment}>
         <div className="flex gap-4 flex-col">
           {/* Free Shipment */}
           <div className="flex flex-col lg:flex-row gap-3 rounded-xl cursor-pointer border border-gray-300 p-6">
@@ -73,9 +90,15 @@ export default function () {
             Back
           </Button>
         </Link>
-        <Link href="/order/shipping/payment">
-          <Button className="px-12 py-6 font-semibold rounded">Next</Button>
-        </Link>{" "}
+        {selectedShipmentMethod ? (
+          <Link href="/order/shipping/payment">
+            <Button className="px-12 py-6 font-semibold rounded">Next</Button>
+          </Link>
+        ) : (
+          <Button className="px-12 py-6 font-semibold rounded" disabled>
+            Next
+          </Button>
+        )}
       </div>
     </div>
   );

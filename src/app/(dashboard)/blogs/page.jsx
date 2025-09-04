@@ -19,7 +19,6 @@ export default function BlogPage() {
     const fetchBlogs = async () => {
       const res = await fetch("/api/blog/allblogs");
       const data = await res.json();
-      console.log(data);
       if (res.ok) {
         setBlogs(data);
       }
@@ -57,7 +56,7 @@ export default function BlogPage() {
             />
             <CardHeader>
               <CardTitle>{blog.title}</CardTitle>
-              <p className="text-sm text-gray-500">By {blog.author.email}</p>
+              <p className="text-sm text-gray-500">By {blog?.author?.email}</p>
             </CardHeader>
             <CardContent>
               <p className="text-gray-700">{blog.content.slice(0, 100)}...</p>
