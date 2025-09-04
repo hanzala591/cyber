@@ -6,18 +6,21 @@ import ProductSpecificationCard from "@/components/ProductSpecificationCard";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { SPECIFICATIONS } from "@/constants/category";
-import Product from "@/models/Product";
-import { ChevronDown } from "lucide-react";
 import React from "react";
 
 export default async function page({ params }) {
-  const response = await fetch("/api/products");
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/products`
+  );
   const productsData = await response.json();
   const products = productsData.products;
   const { id } = await params;
-  const res = await fetch(`/api/products/${id}`, {
-    cache: "no-store",
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/products/${id}`,
+    {
+      cache: "no-store",
+    }
+  );
   const data = await res.json();
   const product = data.product;
   return (
