@@ -114,7 +114,7 @@ function Navbar() {
             onClick={() => setDrawerState(true)}
           />
           <Drawer isOpen={drawerState} onClose={() => setDrawerState(false)}>
-            <div className="flex flex-col items-center pt-16 gap-5 font-semibold">
+            <div className="flex flex-col px-10 items-center pt-16 gap-5 font-semibold">
               <SkipBackIcon
                 className="absolute right-5 top-5"
                 onClick={() => setDrawerState(false)}
@@ -149,6 +149,19 @@ function Navbar() {
               >
                 Blog
               </Link>
+              <Button
+                className="cursor-pointer w-full mt-5"
+                onClick={() => {
+                  fetch("/api/auth/signout", {
+                    method: "POST",
+                  });
+                  localStorage.removeItem("user");
+                  dispatch(signout());
+                  router.replace("/signin");
+                }}
+              >
+                Logout
+              </Button>
             </div>
           </Drawer>
         </div>
