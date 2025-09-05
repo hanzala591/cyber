@@ -26,6 +26,9 @@ const formSchema = z.object({
 });
 export default function ShoppingCart() {
   const cart = useSelector((state) => state.cart.cart);
+  if (cart.length > 1) {
+    console.log(cart.length);
+  }
   const allProducts = useSelector((state) => state.products.products);
   const cartProductsDetails = cart.map((cartProduct) => {
     const productDetails = allProducts.find(
@@ -46,9 +49,7 @@ export default function ShoppingCart() {
       username: "",
     },
   });
-  async function onSubmit(values) {
-    
-  }
+  async function onSubmit(values) {}
   return (
     <div className="lg:w-[80%]  mx-auto flex flex-col p-4 md:px-8 py-8 lg:px-0 lg:py-12">
       <div className="grid lg:grid-cols-2 grid-cols-1 gap-10">
@@ -118,11 +119,22 @@ export default function ShoppingCart() {
                   <div>${totalPrice}</div>
                 </div>
               </div>
-              <Link href="order">
-                <Button type="submit" className="w-full py-7 cursor-pointer">
-                  Checkout
+              {cart.length > 0 ? (
+                <Link href="order">
+                  {console.log(cart.length)}
+                  <Button type="submit" className="w-full py-7 cursor-pointer">
+                    Checkout
+                  </Button>
+                </Link>
+              ) : (
+                <Button
+                  disabled
+                  type="submit"
+                  className="w-full py-7 cursor-pointer"
+                >
+                  Check
                 </Button>
-              </Link>
+              )}
             </form>
           </Form>
         </div>
