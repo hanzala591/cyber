@@ -33,8 +33,17 @@ export default function SignIn() {
   });
 
   async function onSubmit({ email, password }) {
-    dispatch(signinUser({ email, password }));
-    router.push("/");
+    try {
+      const result = await dispatch(signinUser({ email, password }));
+
+      if (signinUser.fulfilled.match(result)) {
+        router.replace("/");
+      } else {
+        console.error("Signin failed:", result.payload || result.error.message);
+      }
+    } catch (err) {
+      console.error("Error during signin:", err);
+    }
   }
   return (
     <div className="w-full h-[100vh] flex items-center justify-center">

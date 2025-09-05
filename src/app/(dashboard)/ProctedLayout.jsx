@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 
 export default function ProctedLayout({ children }) {
   const router = useRouter();
-
   useEffect(() => {
     const token = localStorage.getItem("user");
     if (!token) {
