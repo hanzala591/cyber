@@ -29,7 +29,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} font-sf antialiased min-h-screen`}
       >
         <ReduxProvider>{children}</ReduxProvider>
-        <Toaster position="top-center" />{" "}
+        <Toaster position="top-center" expand={false} />{" "}
       </body>
     </html>
   );

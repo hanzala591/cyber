@@ -25,7 +25,7 @@ export default async function page({ params }) {
   const product = data.product;
   return (
     <div className="w-full">
-      <div className="lg:w-[80%] mx-auto flex flex-col p-4 lg:px-0 py-6">
+      <div className="lg:w-[80%] min-h-80 mx-auto flex flex-col p-4 lg:px-0 py-6">
         <BreadCrum product={product} />
         <div className="lg:py-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

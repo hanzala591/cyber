@@ -50,7 +50,7 @@ export default function Category() {
 
   return (
     <div className="w-full">
-      <div className="lg:w-[80%] mx-auto flex flex-col p-4 md:px-8 lg:px-0 py-6">
+      <div className="lg:w-[80%] min-h-80 mx-auto flex flex-col p-4 md:px-8 lg:px-0 py-6">
         <BreadCrum />
         <div className="grid lg:grid-cols-[25%_1fr] gap-6 w-full">
           <div className="hidden lg:flex">
