@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeToCart } from "@/redux/slices/cartSlice";
 import { useParams } from "next/navigation";
+import { toast } from "sonner";
 
 export default function CartControls() {
   const dispatch = useDispatch();
@@ -15,6 +16,7 @@ export default function CartControls() {
         className="w-full py-7 text-black"
         onClick={() => {
           dispatch(removeToCart(param?.id));
+          toast("Item is remove to cart");
         }}
       >
         Add to Wishlist
@@ -23,6 +25,7 @@ export default function CartControls() {
         className="w-full py-7 cursor-pointer"
         onClick={() => {
           dispatch(addToCart(param?.id));
+          toast("Item is added to cart");
         }}
       >
         Add to Card
